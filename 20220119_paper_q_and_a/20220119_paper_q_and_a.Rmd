@@ -44,61 +44,71 @@ The topic of DAGE is discussed based on the paper by `r met$add("Berry2017")`. Q
 Fragenkatalog:
 
 Introduction - "In the present study, we estimated what we termed deviation in age at slaughter (DAGE), which is the deviation in age at slaughter of each animal relative to its contemporaries for the same carcass weight and subcutaneous carcass fatness."
-> Was ist hier genau gemeint?
+> Was ist hier genau gemeint? $\rightarrow$ siehe `https://pvrqualitasag.github.io/dage_paper_berry_2017/20220119_data_example_nb.nb.html`
 
 
  
+\vspace{3ex}
+Materials and Methods – "Estimated breeding values for carcass weight, carcass fat score, and feed intake from the April 2017 Irish national genetic evaluation were available."
+> Was wurde mit diesen Zuchtwerte genau in dem Studie angeschaut ? Das ist mir nicht klar in der Table 1. 
 
-Materials and Methods – “Estimated breeding values for carcass weight, carcass fat score, and feed intake from the April 2017 Irish national genetic evaluation were available.”
-> Was wurde mit diesen Zuchtwerte genau in dem Studie angeschaut ? Das ist mir nicht klar in der Table 1.
-
- 
-
-Materials and Methods – “A final set of edits was also imposed to improve the integrity of the data and included discarding records …  as well as animals recorded as having been slaughtered at <12 or >36 mo of age”
-
->In dem Fall können wir diese Studie mit Natura-Beef nicht wiederholen ? Eher Fokus aus Banktiere legen?
+$\rightarrow$ Wahrscheinlich soll dann ein Vergleich zu den EBV von DAGE und DCWT gemacht werden.
 
  
+\vspace{3ex}
+Materials and Methods – “A final set of edits was also imposed to improve the integrity of the data and included discarding records ... as well as animals recorded as having been slaughtered at <12 or >36 mo of age”
 
+>In dem Fall können wir diese Studie mit Natura-Beef nicht wiederholen ? Eher Fokus aus Banktiere legen? 
+
+$\rightarrow$ Nein, ich denke, dass sie kein NB als Nutzungsrichtung haben, deshalb die Grenze, das hat nichts mir dem Ansatz von DAGE zu tun. Vielleicht ist bei NB eher das Merkmale DCWT interessant. Das muss überprüft werden.
+
+ 
+\vspace{3ex}
 Materials and Methods – An algorithm was invoked to assign to contemporary groups, animals of the same gender (i.e., bull, steer, and heifer) and similar age purchased into the same herd (from which they would be eventually slaughtered from) in relatively close proximity in time. 
 
->Unter schweizerische Bedingungen (kleine Betriebstruktur) ist diese Definition für CG schwierig zu implementieren. Kann man es anders lösen ?
+>Unter schweizerische Bedingungen (kleine Betriebstruktur) ist diese Definition für CG schwierig zu implementieren. Kann man es anders lösen ? 
 
- 
+$\rightarrow$ Es gibt einen Ansatz von Fritz Schmitz basierend auf  clustering von Gruppen. Das Paper dazu ist `r met$add("Schmitz1991")`
 
+
+\vspace{3ex}
 Materials and Methods
 >Mir sind die Gleichung [1], [2], [3] nicht klar
 
  
+\vspace{3ex}
+Results – "The phenotypic SD in DAGE across the entire data set was 44.2 d; the mean was, as expected, 0. "
 
-Results – «The phenotypic SD in DAGE across the entire data set was 44.2 d; the mean was, as expected, 0. »
+>Wieso war es erwartet ? 
 
->Wieso war es erwartet ?
-
- 
-
-Results – “As expected, the correlation between DAGE and carcass weight was 0, as was the correlation between the DCWT and age at slaughter. The correlation between DAGE and DCWT was −0.24.”
-
->Wieso war es erwartet ?
+$\rightarrow$ DAGE entspricht den Residuen eines fixen linearen Modells (Gleichung 1) und solche Residuen haben immer einen Mittelwert von 0.
 
  
+\vspace{3ex}
+Results – "As expected, the correlation between DAGE and carcass weight was 0, as was the correlation between the DCWT and age at slaughter. The correlation between DAGE and DCWT was $-0.24$."
 
-Results – «The correlation between EBV for DAGE and DCWT both estimated using the single-step approach was −0.35.»
+> Wieso war es erwartet ? 
 
->Bedeutung ?
+$\rightarrow$ In einem linearen Modell sind predictor variablen und Residuen unkorreliert
+
+
+\vspace{3ex}
+Results – "The correlation between EBV for DAGE and DCWT both estimated using the single-step approach was $-0.35$."
+
+> Bedeutung ?
 
  
-
+\vspace{3ex}
 Table 1 und Figure 1
+
 > Interpretation sicher verstehen
 
  
+\vspace{3ex}
+Discussion – "Such an approach, however, is not statistically equivalent to a model with age at slaughter as the dependent variable and carcass weight as an independent variable. This can be clearly illustrated by the fact that … Therefore, the approach proposed here through DAGE is not equivalent to genetic evaluations and statistical models applied heretofore."
 
-Discussion – «Such an approach, however, is not statistically equivalent to a model with age at slaughter as the dependent variable and carcass weight as an independent variable. This can be clearly illustrated by the fact that … Therefore, the approach proposed here through DAGE is not equivalent to genetic evaluations and statistical models applied heretofore.“
+> Genau nachvollziehen diesen Teil.
 
->Genau nachvollziehen diesen Teil.
-
- 
 
 
 # References
