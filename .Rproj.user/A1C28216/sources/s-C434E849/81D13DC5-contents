@@ -1,0 +1,159 @@
+---
+title: Example Data for DAGE
+author: Peter von Rohr
+date: "`r Sys.Date()`"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Disclaimer
+Example data set to explain DAGE is created. 
+
+
+# Simulate Data
+Assume effects for the model given in equation 1. The model is
+
+$$age = CG + GENDER|CWT + GENDER|CFAT + e$$
+
+The following effects are assumed 
+
+```{r, echo=FALSE}
+# constants
+n_dress_perc <- 0.55                   # dressing percentage = slaughter weight/live weight
+vec_levels_cg <- c("1", "2")           # levels of contemporary groups CG
+vec_levels_sex <- c("1", "2", "3")     # sex categories bull, steer, heifer
+# produce vector for table below
+#paste0("'", paste0(as.character(1:5), collapse = "', '"), "'", collapse = "")
+vec_levels_cfat <- c('1', '2', '3', '4', '5')
+mat_levels_cfat_sex <- outer(sapply(vec_levels_sex, 
+                                    function(x) paste0(x, "|", collapse = ""), 
+                                    USE.NAMES = FALSE), 
+                             vec_levels_cfat, 
+                             FUN = "paste0")
+# produce cfat levels
+# paste0("'", paste0(as.vector(t(mat_levels_cfat_sex)), collapse = "', '"), "'", collapse = "")
+tbl_effects <- tibble::tibble(Effect = c("CG", "", 
+                                         "GENDER|CWT", "", "", 
+                                         "GENDER|CFAT", "", "", "", "",
+                                         "", "", "", "", "",
+                                         "", "", "", "", ""),
+                              Level  = c("1", "2", 
+                                         "1", "2", "3", 
+                                         '1|1', '1|2', '1|3', '1|4', '1|5', 
+                                         '2|1', '2|2', '2|3', '2|4', '2|5', 
+                                         '3|1', '3|2', '3|3', '3|4', '3|5'),
+                              Effectsize = c(-5, 17,                         # effects of CG levels
+                                             1.31, 1.07, 0.93,               # average daily gain in live weight
+                                             -0.7, -0.6, 0, 0.7, 1.1,        # fat class * sex effects
+                                             -0.2, -0.2, 0, 0.3, 1.8,
+                                             -0.7, -0.5, 0, 0.8, 0.9))
+knitr::kable(tbl_effects)
+```
+
+
+## Random Levels of Fixed Effects
+The fixed effects contemporary groups, gender, fat coverage and the covariable carcass weight are created randomly for the following animals.
+
+```{r, echo=FALSE}
+set.seed(9192)
+n_nr_animal <- 10
+n_mean_cwt <- 354
+n_sd_cwt <- 28.1
+n_sd_age <- 44.2
+tbl_dage_data <- tibble::tibble(
+  AnimalID = c(1:n_nr_animal),
+  CG = sample(vec_levels_cg, n_nr_animal, replace = TRUE),
+  GENDER = sample(vec_levels_sex, n_nr_animal, replace = TRUE),
+  CFAT = sample(vec_levels_cfat, n_nr_animal, replace = TRUE),
+  CWT = rnorm(n_nr_animal, mean = n_mean_cwt, sd = n_sd_cwt)
+)
+knitr::kable(tbl_dage_data)
+```
+
+
+## Age Computed
+Adding age based on assumptions and based on model given in paper.
+
+```{r}
+# model matrix for cg
+model_mat_cg <- model.matrix(lm(CWT ~ 0 + CG, data = tbl_dage_data))
+attributes(model_mat_cg)$contrasts <- NULL
+attributes(model_mat_cg)$assign <- NULL
+# vector of cg effects
+vec_effect_size_cg <- tbl_effects$Effectsize[1:2]
+
+# model matrix for GENDER|CWT
+model_mat_cwt <- model.matrix(lm(CWT ~ 0 + GENDER, data = tbl_dage_data))
+attributes(model_mat_cwt)$contrasts <- NULL
+attributes(model_mat_cwt)$assign <- NULL
+# vec of GENDER|CWT regression coefficients
+vec_effect_size_cwt <- 1 / (tbl_effects$Effectsize[3:5] * n_dress_perc)  # convert daily gain in slaughter weight to days per kg weight gain
+
+# model matrix for GENDER|CFAT
+tbl_dage_data$GENDER_CFAT <- sapply(1:nrow(tbl_dage_data), 
+                                    function(x) paste(tbl_dage_data$GENDER[x], 
+                                                      tbl_dage_data$CFAT[x], 
+                                                      sep = "|"), 
+                                    USE.NAMES = FALSE)
+model_mat_cfat <- model.matrix(lm(CWT ~ 0 + GENDER_CFAT, data = tbl_dage_data))
+attributes(model_mat_cfat)$contrasts <- NULL
+attributes(model_mat_cfat)$assign <- NULL
+# effect size
+vec_effect_size_cfat <- tbl_effects$Effectsize[c(1,2,5,6,7,9,14)]
+
+# phenotypes
+mat_age_phen <- crossprod(t(model_mat_cg), vec_effect_size_cg) +           # cg effect
+  crossprod(t(model_mat_cwt), vec_effect_size_cwt) * tbl_dage_data$CWT +   # effect of CWT, according to sex
+  crossprod(t(model_mat_cfat), vec_effect_size_cfat) +                     # effect of sex*CFAT
+  rnorm(n_nr_animal, mean = 0, sd = n_sd_age)                                  # residuals
+
+# add phenotypes to data
+tbl_dage_data$AGE <- mat_age_phen[,1]
+```
+
+The complete data set as a table
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+# remove GENDER_CFAT column
+tbl_dage_data <- tbl_dage_data %>% select(-c(GENDER_CFAT))
+# show table
+knitr::kable(tbl_dage_data)
+```
+
+
+## Adding Two Observations
+The following to observations are added.
+
+```{r}
+n_nr_animal_added <- 2
+s_cg_level_added <- "1"
+s_gender_level_added <- "3"
+s_cfat_level_added <- "3"
+n_cwt_added <- n_mean_cwt
+vec_age_added <- vec_effect_size_cg[as.integer(s_cg_level_added)] + 
+  vec_effect_size_cwt[as.integer(s_gender_level_added)] * n_cwt_added +
+  tbl_effects$Effectsize[13] + 
+  rnorm(n_nr_animal_added, mean = 0, sd = n_sd_age)
+tbl_dage_data <- dplyr::bind_rows(tbl_dage_data, 
+  tibble::tibble(AnimalID = n_nr_animal + c(1:n_nr_animal_added),
+                 CG       = rep(s_cg_level_added, n_nr_animal_added),
+                 GENDER   = rep(s_gender_level_added, n_nr_animal_added),
+                 CFAT     = rep(s_cfat_level_added, n_nr_animal_added),
+                 CWT      = rep(n_mean_cwt, n_nr_animal_added),
+                 AGE      = vec_age_added))
+```
+
+The extended data set with the two new observation is
+
+```{r, echo=FALSE}
+knitr::kable(tbl_dage_data)
+```
+
+
+The two observations added have the same level of all fixed effects and they have the same carcass weight (CWT), but their age at slaughter is different. This difference is the differences in DAGE values between the two animals. 
+
+

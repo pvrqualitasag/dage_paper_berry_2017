@@ -1,0 +1,104 @@
+---
+title: DAGE Paper Q and A
+author: Peter von Rohr
+date: 2022-01-19
+output: bookdown::pdf_document2
+bibliography: bibliography.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# hook for graphics
+# rmdhelp::show_knit_hook_call()
+knitr::knit_hooks$set(hook_convert_odg = rmdhelp::hook_convert_odg)
+# initialise mendeley reference object
+met <- rmdhelp::MendeleyExportToolR6$new()
+met$set_this_rmd_file(ps_this_rmd_file = ifelse(rstudioapi::isAvailable(),
+                              rstudioapi::getActiveDocumentContext()$path,
+                              whereami::thisfile()))
+```
+
+# Disclaimer
+The topic of DAGE is discussed based on the paper by `r met$add("Berry2017")`. Questions and answers on different topics in that paper are described here.
+
+
+# Terminology
+
+* DAGE: Deviation in age at slaughter
+* Carcass maturity (not in paper, but used in this summary): Characteristics of carcass satisfying specifictions imposed by slaughterhouses consisting mainly in a pre-defined slaughterweight and a certain fat coverage.
+
+
+# Abstract
+
+* Consumers put more emphasis on efficiency of conversion of feedstuff to proteins and on reduction of negative impacts of animal production on environment. As a consequence, efficiency of feed conversion is getting more important as a trait.
+* Most studies measure efficiency metrics in limited time span falling mostly into linear part of growth phase.
+* Age at which animals reach carcass specifications required by slaughterhouses ("carcass maturity") varies between breeds. But there is also within-breed variation in age at slaughter which is largely unknown.
+* The objective of this study is to quantify the phenotypic and the genetic variation in age at slaughter
+* Novel trait DAGE was defined as the unexplained variability by a statistical model with age at slaughter as the dependent variable and with fixed effects (carcass weight and fat score)
+
+
+# Introduction
+
+
+# Questions
+Fragenkatalog:
+
+Introduction - "In the present study, we estimated what we termed deviation in age at slaughter (DAGE), which is the deviation in age at slaughter of each animal relative to its contemporaries for the same carcass weight and subcutaneous carcass fatness."
+> Was ist hier genau gemeint?
+
+
+ 
+
+Materials and Methods – “Estimated breeding values for carcass weight, carcass fat score, and feed intake from the April 2017 Irish national genetic evaluation were available.”
+> Was wurde mit diesen Zuchtwerte genau in dem Studie angeschaut ? Das ist mir nicht klar in der Table 1.
+
+ 
+
+Materials and Methods – “A final set of edits was also imposed to improve the integrity of the data and included discarding records …  as well as animals recorded as having been slaughtered at <12 or >36 mo of age”
+
+>In dem Fall können wir diese Studie mit Natura-Beef nicht wiederholen ? Eher Fokus aus Banktiere legen?
+
+ 
+
+Materials and Methods – An algorithm was invoked to assign to contemporary groups, animals of the same gender (i.e., bull, steer, and heifer) and similar age purchased into the same herd (from which they would be eventually slaughtered from) in relatively close proximity in time. 
+
+>Unter schweizerische Bedingungen (kleine Betriebstruktur) ist diese Definition für CG schwierig zu implementieren. Kann man es anders lösen ?
+
+ 
+
+Materials and Methods
+>Mir sind die Gleichung [1], [2], [3] nicht klar
+
+ 
+
+Results – «The phenotypic SD in DAGE across the entire data set was 44.2 d; the mean was, as expected, 0. »
+
+>Wieso war es erwartet ?
+
+ 
+
+Results – “As expected, the correlation between DAGE and carcass weight was 0, as was the correlation between the DCWT and age at slaughter. The correlation between DAGE and DCWT was −0.24.”
+
+>Wieso war es erwartet ?
+
+ 
+
+Results – «The correlation between EBV for DAGE and DCWT both estimated using the single-step approach was −0.35.»
+
+>Bedeutung ?
+
+ 
+
+Table 1 und Figure 1
+> Interpretation sicher verstehen
+
+ 
+
+Discussion – «Such an approach, however, is not statistically equivalent to a model with age at slaughter as the dependent variable and carcass weight as an independent variable. This can be clearly illustrated by the fact that … Therefore, the approach proposed here through DAGE is not equivalent to genetic evaluations and statistical models applied heretofore.“
+
+>Genau nachvollziehen diesen Teil.
+
+ 
+
+
+# References
